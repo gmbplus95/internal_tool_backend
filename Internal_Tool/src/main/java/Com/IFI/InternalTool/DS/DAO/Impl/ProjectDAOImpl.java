@@ -12,67 +12,66 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import Com.IFI.InternalTool.DS.DAO.EmployeeDAO;
-import Com.IFI.InternalTool.DS.Model.Employee;
-import Com.IFI.InternalTool.DS.Model.Group_ifi;
-@Repository("EmployeeDAO")
+import Com.IFI.InternalTool.DS.DAO.ProjectDAO;
+import Com.IFI.InternalTool.DS.Model.Project;
+import Com.IFI.InternalTool.DS.Model.Project_manager;
+@Repository("ProjectDAO")
 @Transactional
-public class EmployeeDAOImpl implements EmployeeDAO{
-	
+public class ProjectDAOImpl implements ProjectDAO {
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 	@Override
-	public List<Employee> getAllEmployee() {
+	public List<Project> getAllProject() {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Employee";
+		String hql = "FROM Project";
 		Query query = session.createQuery(hql);
 		//query.setParameter("userId", userId);
-		List<Employee> list = query.list();
+		List<Project> list = query.list();
 		session.close();
 		return list;
 	}
-	//save or update
+	
 	@Override
-	public boolean saveEmployee(Employee employee) {
+	public boolean saveProject(Project project) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		session.saveOrUpdate(employee);
+		session.saveOrUpdate(project);
 		session.close();
 		return true;
 	}
+
 	@Override
-	public boolean deleteEmployee(long employee_id) {
+	public boolean deleteProject(long project_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		Transaction tx = null;
 		tx=session.beginTransaction();
-		String hql = "Delete from Employee where employee_id=:employee_id";
+		String hql = "Delete from Project where project_id=:project_id";
 		Query query = session.createQuery(hql);
-		query.setParameter("employee_id", employee_id);
+		query.setParameter("project_id", project_id);
 		query.executeUpdate();
 		tx.commit();
 		session.close();
 		return true;
 	}
+
 	@Override
-	public Employee getEmployeeById(long employee_id) {
+	public Project getProjectById(long project_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Employee where employee_id=:employee_id";
+		String hql = "FROM Project where project_id=:project_id";
+		Query query = session.createQuery(hql);
+		query.setParameter("project_id", project_id);
+		Project pro = (Project) query.uniqueResult();
+		session.close();
+		return pro;
+	}
+
+	@Override
+	public List<Project_manager> getProjectIdByEmp(long employee_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select p FROM Project_manager p LEFT JOIN Vacation AS v ON p.employee_id=v.employee_id where p.employee_id=:employee_id";
 		Query query = session.createQuery(hql);
 		query.setParameter("employee_id", employee_id);
-		Employee emp = (Employee) query.uniqueResult();
-		session.close();
-		return emp;
-	}
-	@Override
-	public List<Group_ifi> getAllGroup() {
-		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Group_ifi";
-		Query query = session.createQuery(hql);
-		//query.setParameter("userId", userId);
-		List<Group_ifi> list = query.list();
-		session.close();
+		List<Project_manager> list=query.list();
 		return list;
 	}
-	
-	
 
 }
