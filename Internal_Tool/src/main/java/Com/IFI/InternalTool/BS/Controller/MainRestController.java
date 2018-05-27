@@ -115,13 +115,16 @@ public class MainRestController {
 	@RequestMapping("/saveProject")
 	public @ResponseBody Payload saveProject(@RequestBody Project project) {
 		Payload message = new Payload();
-		if (projectService.saveProject(project)) {
+		Date start_date=project.getStart_date();
+		Date end_date=project.getEnd_date();
+		if (start_date.compareTo(end_date)<0 || end_date==null) {
+			projectService.saveProject(project);
 			message.setDescription("Save or Update project successfully");
 			message.setCode("CODE OK!");
 			message.setStatus("OK!");
 			message.setData(project);
 		} else {
-			message.setStatus("Error!");
+			message.setStatus("Error Date!");
 		}
 		;
 		return message;
