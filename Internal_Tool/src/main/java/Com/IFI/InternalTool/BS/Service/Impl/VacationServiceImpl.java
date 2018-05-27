@@ -9,6 +9,7 @@ import Com.IFI.InternalTool.BS.Service.VacationService;
 import Com.IFI.InternalTool.DS.DAO.VacationDAO;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_type;
 @Service("VacationService")
 public class VacationServiceImpl implements VacationService{
 	@Autowired
@@ -32,6 +33,10 @@ public class VacationServiceImpl implements VacationService{
 	@Override
 	public void saveVacationApproved(Vacation_approved vacation_approved) {
 		vacationDAO.saveVacationApproved(vacation_approved);
+	}
+	@Override
+	public List<Vacation_type> getAllVacationType() {
+		return vacationDAO.getAllVacationType();
 	}
 
 }

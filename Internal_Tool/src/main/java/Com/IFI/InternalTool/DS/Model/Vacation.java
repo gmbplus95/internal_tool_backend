@@ -22,6 +22,8 @@ public class Vacation implements Serializable{
 	private long vacation_id;
 	@Column(name = "employee_id")
 	private long employee_id;
+	@Column(name = "project_id")
+	private long project_id;
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "from_date")
 	private Date from_date;
@@ -41,27 +43,7 @@ public class Vacation implements Serializable{
 	@Column(name = "updated_at")
 	private Date updated_at;
 	@Column(name = "is_updateable", nullable = false)
-	private boolean is_updateable;
-
-	public boolean getIs_updatetable() {
-		return is_updateable;
-	}
-	public void setIs_updatetable(boolean is_updateable) {
-		this.is_updateable = is_updateable;
-	}
-	public Date getCreated_at() {
-		return created_at;
-	}
-	public void setCreated_at(Date created_at) {
-		this.created_at = created_at;
-	}
-	public Date getUpdated_at() {
-		return updated_at;
-	}
-	public void setUpdated_at(Date updated_at) {
-		this.updated_at = updated_at;
-	}
-	
+	private Boolean is_updateable;
 	public long getVacation_id() {
 		return vacation_id;
 	}
@@ -73,6 +55,12 @@ public class Vacation implements Serializable{
 	}
 	public void setEmployee_id(long employee_id) {
 		this.employee_id = employee_id;
+	}
+	public long getProject_id() {
+		return project_id;
+	}
+	public void setProject_id(long project_id) {
+		this.project_id = project_id;
 	}
 	public Date getFrom_date() {
 		return from_date;
@@ -104,14 +92,29 @@ public class Vacation implements Serializable{
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
-	public Vacation() {
-		super();
+	public Date getCreated_at() {
+		return created_at;
 	}
-	public Vacation(long employee_id, Date from_date, Date to_date, long vacation_type, String description, int status,
-			Date created_at, Date updated_at, boolean is_updateable) {
+	public void setCreated_at(Date created_at) {
+		this.created_at = created_at;
+	}
+	public Date getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(Date updated_at) {
+		this.updated_at = updated_at;
+	}
+	public Boolean getIs_updateable() {
+		return is_updateable;
+	}
+	public void setIs_updateable(Boolean is_updateable) {
+		this.is_updateable = is_updateable;
+	}
+	public Vacation(long employee_id, long project_id, Date from_date, Date to_date, long vacation_type,
+			String description, int status, Date created_at, Date updated_at, Boolean is_updateable) {
 		super();
 		this.employee_id = employee_id;
+		this.project_id = project_id;
 		this.from_date = from_date;
 		this.to_date = to_date;
 		this.vacation_type = vacation_type;
@@ -121,6 +124,12 @@ public class Vacation implements Serializable{
 		this.updated_at = updated_at;
 		this.is_updateable = is_updateable;
 	}
+	public Vacation() {
+		super();
+	}
+	
+	
+	
 
 	
 }

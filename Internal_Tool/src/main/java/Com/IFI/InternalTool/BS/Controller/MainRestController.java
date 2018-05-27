@@ -20,6 +20,7 @@ import Com.IFI.InternalTool.DS.Model.Project;
 import Com.IFI.InternalTool.DS.Model.Project_manager;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_type;
 
 @RestController
 public class MainRestController {
@@ -146,10 +147,10 @@ public class MainRestController {
 	// get project by employee_id from project_manager table
 	@RequestMapping("/getProjectByEmp")
 	public List<Project> getProjectByEmp(@RequestParam long employee_id) {
-		List<Project_manager> list = projectService.getProjectManagerByEmp(employee_id);
+		List<Long> list = projectService.getProjectByEmp(employee_id);
 		List<Project> list2 = new ArrayList<>();
-		for (Project_manager m : list) {
-			list2.add(projectService.getProjectById(m.getProject_id()));
+		for (Long m : list) {
+			list2.add(projectService.getProjectById(m));
 		}
 		return list2;
 	}
@@ -169,30 +170,89 @@ public class MainRestController {
 
 		return message;
 	}
-
-	// save or update project
+	//get all vacation type
+	
+	@RequestMapping("/getAllVacationType")
+	public List<Vacation_type> getAllVacationType() {
+		return vacationService.getAllVacationType();
+	}
+	
+	// save vacation
 
 	@RequestMapping("/saveVacation")
 	public @ResponseBody Payload saveVacation(@RequestBody Vacation vacation) {
-		Payload message = new Payload();
-		if (vacationService.saveVacation(vacation)) {
-			List<Project_manager> pm= projectService.getProjectManagerByEmp(vacation.getEmployee_id());
+		Payload message = new Payload();		
+			List<Project_manager> pm= projectService.getProjectManagerByEmp(vacation.getEmployee_id(),vacation.getProject_id());
 			for(Project_manager u:pm) {
-				Vacation_approved va=new Vacation_approved();
-				va.setVacation_id(vacation.getVacation_id());
-				va.setManager_id(u.getManager_id());
-				va.setPriority(u.getPriority());
-				vacationService.saveVacationApproved(va);	
-			}
+				Project p=projectService.getProjectById(u.getProject_id());//get project to check date
+				if(p.getEnd_date()!=null) {
+					Date end_date=p.getEnd_date();
+					Date start_date=p.getStart_date();
+					Date from_date=vacation.getFrom_date();
+					Date to_date=vacation.getTo_date();
+						if(from_date.compareTo(start_date)>0 && from_date.compareTo(end_date)<0
+								&& to_date.compareTo(start_date)>0 
+								&& to_date.compareTo(end_date)<0 && from_date.compareTo(to_date)<0 
+								) {
+							Date date = new java.util.Date();
+							vacation.setCreated_at(date);
+							vacation.setUpdated_at(date);
+							vacation.setStatus(1);
+							vacation.setIs_updateable(true); 
+							vacationService.saveVacation(vacation);
+							Vacation_approved va=new Vacation_approved();
+							va.setVacation_id(vacation.getVacation_id());
+							va.setManager_id(u.getManager_id());
+							va.setPriority(u.getPriority());
+							vacationService.saveVacationApproved(va);
+							message.setDescription("Save vacation successfully");
+							message.setCode("CODE OK!");
+							message.setStatus("OK!");
+							message.setData(vacation);
+						}
+						else {
+							message.setDescription("Wrong Date");
+							message.setCode("Error!");
+							message.setStatus("Error");
+						}
+				}
+				
+				if(p.getEnd_date()==null) {
+					Date start_date=p.getStart_date();
+					Date from_date=vacation.getFrom_date();
+					Date to_date=vacation.getTo_date();
+						if(from_date.compareTo(start_date)>0
+								&& to_date.compareTo(start_date)>0 
+								&& from_date.compareTo(to_date)<0 
+								) {
+							Date date = new java.util.Date();
+							vacation.setCreated_at(date);
+							vacation.setUpdated_at(date);
+							vacation.setStatus(1);
+							vacation.setIs_updateable(true);
+							vacationService.saveVacation(vacation);
+							Vacation_approved va=new Vacation_approved();
+							va.setVacation_id(vacation.getVacation_id());
+							va.setManager_id(u.getManager_id());
+							va.setPriority(u.getPriority());
+							vacationService.saveVacationApproved(va);
+							message.setDescription("Save vacation successfully");
+							message.setCode("CODE OK!");
+							message.setStatus("OK!");
+							message.setData(vacation);
+						}
+						else {
+							message.setDescription("Wrong Date");
+							message.setCode("Error!");
+							message.setStatus("Error");
+						}
+				}
+				//end_date=null
+				
 			
-			message.setDescription("Save or Update project successfully");
-			message.setCode("CODE OK!");
-			message.setStatus("OK!");
-			message.setData(vacation);
-		} else {
-			message.setStatus("Error!");
-		}
-		;
+				
+			}
+		
 		return message;
 	}
 
@@ -201,7 +261,7 @@ public class MainRestController {
 	public @ResponseBody Payload editVacation(@RequestBody Vacation vacation) {
 		Payload message = new Payload();
 
-		if (vacation.getIs_updatetable() == true) {
+		if (vacation.getIs_updateable() == true) {
 			Date date = new java.util.Date();
 			vacation.setUpdated_at(date);
 			if (vacationService.saveVacation(vacation)) {
@@ -224,7 +284,7 @@ public class MainRestController {
 	public @ResponseBody Payload deleteVacation(@RequestParam long vacation_id) {
 		Payload message = new Payload();
 		Vacation v = vacationService.getVacationById(vacation_id);
-		if (v.getIs_updatetable() == true)
+		if (v.getIs_updateable() == true)
 		{
 			if (vacationService.deleteVacation(vacation_id)) {
 				message.setDescription("Delete vacation successfully");
@@ -239,6 +299,8 @@ public class MainRestController {
 		}
 		return message;
 	}
-
+	
 	/*-----------End Vacation MainRestController--------*/
+	
+	
 }

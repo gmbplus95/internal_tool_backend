@@ -4,6 +4,7 @@ import java.util.List;
 
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_type;
 
 public interface VacationDAO {
 		List<Vacation> getAllVacationByEmp(long employee_id);
@@ -11,5 +12,5 @@ public interface VacationDAO {
 		boolean deleteVacation(long vacation_id);
 		Vacation getVacationById(long vacation_id);
 		void saveVacationApproved(Vacation_approved vacation_approved);
-		
+		List<Vacation_type> getAllVacationType();
 }

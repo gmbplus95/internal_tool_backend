@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import Com.IFI.InternalTool.DS.DAO.VacationDAO;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_type;
 @Repository("VacationDAO")
 @Transactional
 public class VacationDAOImpl implements VacationDAO{
@@ -70,6 +71,15 @@ public class VacationDAOImpl implements VacationDAO{
 		session.saveOrUpdate(vacation_approved);
 		session.close();
 		tx.commit();
+	}
+	@Override
+	public List<Vacation_type> getAllVacationType() {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "from Vacation_type";
+		Query query = session.createQuery(hql);
+		List<Vacation_type> list=query.list();
+		session.close();
+		return list;
 	}
 
 }
