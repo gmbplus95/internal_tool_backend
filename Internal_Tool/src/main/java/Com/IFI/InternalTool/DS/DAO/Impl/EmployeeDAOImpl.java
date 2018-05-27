@@ -35,7 +35,10 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Override
 	public boolean saveEmployee(Employee employee) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		Transaction tx = null;
+		tx=session.beginTransaction();
 		session.saveOrUpdate(employee);
+		tx.commit();
 		session.close();
 		return true;
 	}

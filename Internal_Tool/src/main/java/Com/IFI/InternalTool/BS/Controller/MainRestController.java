@@ -1,5 +1,7 @@
 package Com.IFI.InternalTool.BS.Controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Com.IFI.InternalTool.BS.Service.EmployeeService;
 import Com.IFI.InternalTool.BS.Service.ProjectService;
+import Com.IFI.InternalTool.BS.Service.VacationService;
 import Com.IFI.InternalTool.DS.Model.Employee;
 import Com.IFI.InternalTool.DS.Model.Group_ifi;
 import Com.IFI.InternalTool.DS.Model.Project;
 import Com.IFI.InternalTool.DS.Model.Project_manager;
+import Com.IFI.InternalTool.DS.Model.Vacation;
+import Com.IFI.InternalTool.DS.Model.Vacation_approved;
 
 @RestController
 public class MainRestController {
@@ -22,122 +27,218 @@ public class MainRestController {
 	EmployeeService employeeService;
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	VacationService vacationService;
 	/*-----------Begin Employee MainRestController--------*/
-	
-	//get all employee data
+
+	// get all employee data
 	@RequestMapping("/getAllEmployee")
-	public List<Employee> getAllEmployee(){
+	public List<Employee> getAllEmployee() {
 		return employeeService.getAllEmployee();
 	}
-	//get all Group
+
+	// get all Group
 	@RequestMapping("/getAllGroup")
-	public List<Group_ifi> getAllGroup(){
+	public List<Group_ifi> getAllGroup() {
 		return employeeService.getAllGroup();
 	}
-	//get employee by id
+
+	// get employee by id
 	@RequestMapping("/getEmployeeById")
-	public @ResponseBody Payload getEmployeeById(@RequestParam long employee_id){
-		 Payload message=new Payload();
-		 employeeService.getEmployeeById(employee_id);
-			 message.setDescription("Get employee successfully");
-			 message.setCode("CODE OK!");
-			 message.setStatus("OK!");
-			 message.setData(employeeService.getEmployeeById(employee_id));
-		 return message;
+	public @ResponseBody Payload getEmployeeById(@RequestParam long employee_id) {
+		Payload message = new Payload();
+		employeeService.getEmployeeById(employee_id);
+		message.setDescription("Get employee successfully");
+		message.setCode("CODE OK!");
+		message.setStatus("OK!");
+		message.setData(employeeService.getEmployeeById(employee_id));
+		return message;
 	}
-	//save or update employee
-	
+	// save or update employee
+
 	@RequestMapping("/saveEmployee")
-	public @ResponseBody Payload saveEmployee(@RequestBody Employee employee){
-		 Payload message=new Payload();
-		 if(employeeService.saveEmployee(employee)) {
-			 message.setDescription("Save or Update employee successfully");
-			 message.setCode("CODE OK!");
-			 message.setStatus("OK!");
-			 message.setData(employee);
-		 }
-		 else {
-			 message.setStatus("Error!");
-		 };
-		 return message;
+	public @ResponseBody Payload saveEmployee(@RequestBody Employee employee) {
+		Payload message = new Payload();
+		if (employeeService.saveEmployee(employee)) {
+			message.setDescription("Save or Update employee successfully");
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setData(employee);
+		} else {
+			message.setStatus("Error!");
+		}
+		;
+		return message;
 	}
-	
-	//delete employee by id
-	
+
+	// delete employee by id
+
 	@RequestMapping("/deleteEmployee")
-	public @ResponseBody Payload deleteEmployee(@RequestParam long employee_id){
-		 Payload message=new Payload();
-		 if(employeeService.deleteEmployee(employee_id)) {
-			 message.setDescription("Delete employee successfully");
-			 message.setCode("CODE OK!");
-			 message.setStatus("OK!");
-			 message.setData("");
-		 }
-		 else {
-			 message.setStatus("Error!");
-		 };
-		 return message;
+	public @ResponseBody Payload deleteEmployee(@RequestParam long employee_id) {
+		Payload message = new Payload();
+		if (employeeService.deleteEmployee(employee_id)) {
+			message.setDescription("Delete employee successfully");
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setData("");
+		} else {
+			message.setStatus("Error!");
+		}
+		;
+		return message;
 	}
 	/*-----------End Employee MainRestController--------*/
-	
-	
+
 	/*-----------Begin Project MainRestController--------*/
-	
-	//get all project data
-		@RequestMapping("/getAllProject")
-		public List<Project> getAllProject(){
-			return projectService.getAllProject();
+
+	// get all project data
+	@RequestMapping("/getAllProject")
+	public List<Project> getAllProject() {
+		return projectService.getAllProject();
+	}
+
+	// get project by id
+	@RequestMapping("/getProjectById")
+	public @ResponseBody Payload getProjectById(@RequestParam long project_id) {
+		Payload message = new Payload();
+		projectService.getProjectById(project_id);
+		message.setDescription("Get project successfully");
+		message.setCode("CODE OK!");
+		message.setStatus("OK!");
+		message.setData(projectService.getProjectById(project_id));
+		return message;
+	}
+
+	// save or update project
+
+	@RequestMapping("/saveProject")
+	public @ResponseBody Payload saveProject(@RequestBody Project project) {
+		Payload message = new Payload();
+		if (projectService.saveProject(project)) {
+			message.setDescription("Save or Update project successfully");
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setData(project);
+		} else {
+			message.setStatus("Error!");
 		}
-		//get project by id
-		@RequestMapping("/getProjectById")
-		public @ResponseBody Payload getProjectById(@RequestParam long project_id){
-			 Payload message=new Payload();
-			 projectService.getProjectById(project_id);
-				 message.setDescription("Get project successfully");
-				 message.setCode("CODE OK!");
-				 message.setStatus("OK!");
-				 message.setData( projectService.getProjectById(project_id));
-			 return message;
+		;
+		return message;
+	}
+
+	// delete project by id
+
+	@RequestMapping("/deleteProject")
+	public @ResponseBody Payload deleteProject(@RequestParam long project_id) {
+		Payload message = new Payload();
+		if (projectService.deleteProject(project_id)) {
+			message.setDescription("Delete project successfully");
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setData("");
+		} else {
+			message.setStatus("Error!");
 		}
-		
-		//save or update project
-		
-		@RequestMapping("/saveProject")
-		public @ResponseBody Payload saveProject(@RequestBody Project project){
-			 Payload message=new Payload();
-			 if(projectService.saveProject(project)) {
-				 message.setDescription("Save or Update project successfully");
-				 message.setCode("CODE OK!");
-				 message.setStatus("OK!");
-				 message.setData(project);
-			 }
-			 else {
-				 message.setStatus("Error!");
-			 };
-			 return message;
+		;
+		return message;
+	}
+
+	// get project by employee_id from project_manager table
+	@RequestMapping("/getProjectByEmp")
+	public List<Project> getProjectByEmp(@RequestParam long employee_id) {
+		List<Project_manager> list = projectService.getProjectManagerByEmp(employee_id);
+		List<Project> list2 = new ArrayList<>();
+		for (Project_manager m : list) {
+			list2.add(projectService.getProjectById(m.getProject_id()));
 		}
-		
-		//delete project by id
-		
-		@RequestMapping("/deleteProject")
-		public @ResponseBody Payload deleteProject(@RequestParam long project_id){
-			 Payload message=new Payload();
-			 if(projectService.deleteProject(project_id)) {
-				 message.setDescription("Delete project successfully");
-				 message.setCode("CODE OK!");
-				 message.setStatus("OK!");
-				 message.setData("");
-			 }
-			 else {
-				 message.setStatus("Error!");
-			 };
-			 return message;
+		return list2;
+	}
+
+	/*-----------End Project MainRestController--------*/
+
+	/*-----------Begin Vacation MainRestController--------*/
+
+	@RequestMapping("/getVacationByEmp")
+	public @ResponseBody Payload getVacationByEmp(@RequestParam long employee_id) {
+		Payload message = new Payload();
+		vacationService.getAllVacationByEmp(employee_id);
+		message.setDescription("Get vacation by employee successfully");
+		message.setCode("CODE OK!");
+		message.setStatus("OK!");
+		message.setData(vacationService.getAllVacationByEmp(employee_id));
+
+		return message;
+	}
+
+	// save or update project
+
+	@RequestMapping("/saveVacation")
+	public @ResponseBody Payload saveVacation(@RequestBody Vacation vacation) {
+		Payload message = new Payload();
+		if (vacationService.saveVacation(vacation)) {
+			List<Project_manager> pm= projectService.getProjectManagerByEmp(vacation.getEmployee_id());
+			for(Project_manager u:pm) {
+				Vacation_approved va=new Vacation_approved();
+				va.setVacation_id(vacation.getVacation_id());
+				va.setManager_id(u.getManager_id());
+				va.setPriority(u.getPriority());
+				vacationService.saveVacationApproved(va);	
+			}
+			
+			message.setDescription("Save or Update project successfully");
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setData(vacation);
+		} else {
+			message.setStatus("Error!");
 		}
-		//get project id from project_manager table by employee_id
-		@RequestMapping("/getProjectIdByEmp")
-		public List<Project_manager> getProjectIdByEmp(@RequestParam long employee_id){
-			return projectService.getProjectIdByEmp(employee_id);
+		;
+		return message;
+	}
+
+	// edit vacation
+	@RequestMapping("/editVacation")
+	public @ResponseBody Payload editVacation(@RequestBody Vacation vacation) {
+		Payload message = new Payload();
+
+		if (vacation.getIs_updatetable() == true) {
+			Date date = new java.util.Date();
+			vacation.setUpdated_at(date);
+			if (vacationService.saveVacation(vacation)) {
+				message.setDescription("Edit project successfully");
+				message.setCode("CODE OK!");
+				message.setStatus("OK!");
+				message.setData(vacation);
+			}
+
+		} else {
+			message.setStatus("Error!");
+			message.setDescription("Vacation is processing, You can not update");
 		}
-		
-		/*-----------End Project MainRestController--------*/	
+		return message;
+	}
+
+	// delete vacation by id
+
+	@RequestMapping("/deleteVacation")
+	public @ResponseBody Payload deleteVacation(@RequestParam long vacation_id) {
+		Payload message = new Payload();
+		Vacation v = vacationService.getVacationById(vacation_id);
+		if (v.getIs_updatetable() == true)
+		{
+			if (vacationService.deleteVacation(vacation_id)) {
+				message.setDescription("Delete vacation successfully");
+				message.setCode("CODE OK!");
+				message.setStatus("OK!");
+				message.setData("");
+			} 
+		}
+		else {
+			message.setStatus("Error!");
+			message.setDescription("Vacation is processing, You can not delete");
+		}
+		return message;
+	}
+
+	/*-----------End Vacation MainRestController--------*/
 }

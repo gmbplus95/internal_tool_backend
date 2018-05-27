@@ -34,8 +34,8 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 
 	@Override
-	public List<Project_manager> getProjectIdByEmp(long employee_id) {
-		return projectDAO.getProjectIdByEmp(employee_id);
+	public List<Project_manager> getProjectManagerByEmp(long employee_id) {
+		return projectDAO.getProjectManagerByEmp(employee_id);
 	}
 	
 }

@@ -13,5 +13,5 @@ public interface ProjectDAO {
 	boolean saveProject(Project project);
 	boolean deleteProject(long project_id);
 	Project getProjectById(long project_id);
-	List<Project_manager> getProjectIdByEmp(long employee_id);
+	List<Project_manager> getProjectManagerByEmp(long employee_id);
 }

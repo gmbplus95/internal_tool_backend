@@ -12,69 +12,64 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import Com.IFI.InternalTool.DS.DAO.ProjectDAO;
-import Com.IFI.InternalTool.DS.Model.Project;
-import Com.IFI.InternalTool.DS.Model.Project_manager;
-@Repository("ProjectDAO")
+import Com.IFI.InternalTool.DS.DAO.VacationDAO;
+import Com.IFI.InternalTool.DS.Model.Vacation;
+import Com.IFI.InternalTool.DS.Model.Vacation_approved;
+@Repository("VacationDAO")
 @Transactional
-public class ProjectDAOImpl implements ProjectDAO {
+public class VacationDAOImpl implements VacationDAO{
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 	@Override
-	public List<Project> getAllProject() {
+	public List<Vacation> getAllVacationByEmp(long employee_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Project";
+		String hql = "FROM Vacation where employee_id=:employee_id";
 		Query query = session.createQuery(hql);
-		//query.setParameter("userId", userId);
-		List<Project> list = query.list();
+		query.setParameter("employee_id", employee_id);
+		List<Vacation> list=query.list();
 		session.close();
 		return list;
 	}
-	
 	@Override
-	public boolean saveProject(Project project) {
+	public boolean saveVacation(Vacation vacation) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		Transaction tx = null;
 		tx=session.beginTransaction();
-		session.saveOrUpdate(project);
-		tx.commit();
+		session.saveOrUpdate(vacation);
 		session.close();
+		tx.commit();
 		return true;
 	}
-
 	@Override
-	public boolean deleteProject(long project_id) {
+	public boolean deleteVacation(long vacation_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		Transaction tx = null;
 		tx=session.beginTransaction();
-		String hql = "Delete from Project where project_id=:project_id";
+		String hql = "Delete from Vacation where vacation_id=:vacation_id and is_updateable=true";
 		Query query = session.createQuery(hql);
-		query.setParameter("project_id", project_id);
+		query.setParameter("vacation_id", vacation_id);
 		query.executeUpdate();
 		tx.commit();
 		session.close();
 		return true;
 	}
-
 	@Override
-	public Project getProjectById(long project_id) {
+	public Vacation getVacationById(long vacation_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Project where project_id=:project_id and status=true";
+		String hql = "FROM Vacation where vacation_id=:vacation_id";
 		Query query = session.createQuery(hql);
-		query.setParameter("project_id", project_id);
-		Project pro = (Project) query.uniqueResult();
-		session.close();
-		return pro;
+		query.setParameter("vacation_id", vacation_id);
+		Vacation v=(Vacation) query.uniqueResult();
+		return v;
 	}
-
 	@Override
-	public List<Project_manager> getProjectManagerByEmp(long employee_id) {
+	public void saveVacationApproved(Vacation_approved vacation_approved) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "Select distinct p FROM Project_manager p LEFT JOIN Vacation AS v ON p.employee_id=v.employee_id where p.employee_id=:employee_id";
-		Query query = session.createQuery(hql);
-		query.setParameter("employee_id", employee_id);
-		List<Project_manager> list=query.list();
-		return list;
+		Transaction tx = null;
+		tx=session.beginTransaction();
+		session.saveOrUpdate(vacation_approved);
+		session.close();
+		tx.commit();
 	}
 
 }
