@@ -42,8 +42,6 @@ public class Vacation implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "updated_at")
 	private Date updated_at;
-	@Column(name = "is_updateable", nullable = false)
-	private Boolean is_updateable;
 	public long getVacation_id() {
 		return vacation_id;
 	}
@@ -104,14 +102,9 @@ public class Vacation implements Serializable{
 	public void setUpdated_at(Date updated_at) {
 		this.updated_at = updated_at;
 	}
-	public Boolean getIs_updateable() {
-		return is_updateable;
-	}
-	public void setIs_updateable(Boolean is_updateable) {
-		this.is_updateable = is_updateable;
-	}
+
 	public Vacation(long employee_id, long project_id, Date from_date, Date to_date, long vacation_type,
-			String description, int status, Date created_at, Date updated_at, Boolean is_updateable) {
+			String description, int status, Date created_at, Date updated_at) {
 		super();
 		this.employee_id = employee_id;
 		this.project_id = project_id;
@@ -122,7 +115,6 @@ public class Vacation implements Serializable{
 		this.status = status;
 		this.created_at = created_at;
 		this.updated_at = updated_at;
-		this.is_updateable = is_updateable;
 	}
 	public Vacation() {
 		super();

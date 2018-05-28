@@ -33,17 +33,17 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	}
 	//save or update
 	@Override
-	public boolean saveEmployee(Employee employee) {
+	public Long saveEmployee(Employee employee) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		Transaction tx = null;
 		tx=session.beginTransaction();
 		session.saveOrUpdate(employee);
 		tx.commit();
 		session.close();
-		return true;
+		return employee.getEmployee_id();
 	}
 	@Override
-	public boolean deleteEmployee(long employee_id) {
+	public Long deleteEmployee(long employee_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		Transaction tx = null;
 		tx=session.beginTransaction();
@@ -53,7 +53,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		query.executeUpdate();
 		tx.commit();
 		session.close();
-		return true;
+		return employee_id;
 	}
 	@Override
 	public Employee getEmployeeById(long employee_id) {
@@ -70,8 +70,17 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		String hql = "FROM Group_ifi";
 		Query query = session.createQuery(hql);
-		//query.setParameter("userId", userId);
 		List<Group_ifi> list = query.list();
+		session.close();
+		return list;
+	}
+	@Override
+	public List<Long> getEmployeeByManager(long manager_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select employee_id from Project_manager where manager_id=:manager_id";
+		Query query = session.createQuery(hql);
+		query.setParameter("manager_id", manager_id);
+		List<Long> list=query.list();
 		session.close();
 		return list;
 	}

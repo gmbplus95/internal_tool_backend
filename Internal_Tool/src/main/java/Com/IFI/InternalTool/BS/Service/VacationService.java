@@ -15,5 +15,6 @@ public interface VacationService {
 	void saveVacationApproved(Vacation_approved vacation_approved);
 	List<Vacation_type> getAllVacationType();
 	List<Vacation> searchVacation(VacationSearch vacationSearch);
+	List<Vacation> searchVacationP2(Long employee_id,VacationSearch vacationSearch);
 
 }

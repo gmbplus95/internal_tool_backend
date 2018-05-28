@@ -19,7 +19,7 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 
 	@Override
-	public boolean saveProject(Project project) {
+	public Long saveProject(Project project) {
 		return projectDAO.saveProject(project);
 	}
 

@@ -31,14 +31,14 @@ public class ProjectDAOImpl implements ProjectDAO {
 	}
 	
 	@Override
-	public boolean saveProject(Project project) {
+	public Long saveProject(Project project) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		Transaction tx = null;
 		tx=session.beginTransaction();
 		session.saveOrUpdate(project);
 		tx.commit();
 		session.close();
-		return true;
+		return project.getProject_id();
 	}
 
 	@Override

@@ -20,11 +20,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDAO.getAllEmployee();
 	}
 	@Override
-	public boolean saveEmployee(Employee employee) {
+	public Long saveEmployee(Employee employee) {
 		 return employeeDAO.saveEmployee(employee);
 	}
 	@Override
-	public boolean deleteEmployee(long employee_id) {
+	public Long deleteEmployee(long employee_id) {
 		return employeeDAO.deleteEmployee(employee_id);
 	}
 	@Override
@@ -33,8 +33,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	@Override
 	public List<Group_ifi> getAllGroup() {
-		// TODO Auto-generated method stub
 		return employeeDAO.getAllGroup();
+	}
+	@Override
+	public List<Long> getEmployeeByManager(long manager_id) {
+		return employeeDAO.getEmployeeByManager(manager_id);
 	}
 
 }

@@ -9,8 +9,9 @@ import Com.IFI.InternalTool.DS.Model.Group_ifi;
 @Repository
 public interface EmployeeDAO{
 	List<Employee> getAllEmployee();
-	boolean saveEmployee(Employee employee);
-	boolean deleteEmployee(long employee_id);
+	Long saveEmployee(Employee employee);
+	Long deleteEmployee(long employee_id);
 	Employee getEmployeeById(long employee_id);
 	List<Group_ifi> getAllGroup();
+	List<Long> getEmployeeByManager(long manager_id);
 }

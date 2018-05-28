@@ -40,6 +40,10 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.getAllVacationType();
 	}
 	@Override
+	public List<Vacation> searchVacationP2(Long employee_id,VacationSearch vacationSearch) {
+		return vacationDAO.searchVacationP2(employee_id,vacationSearch);
+	}
+	@Override
 	public List<Vacation> searchVacation(VacationSearch vacationSearch) {
 		return vacationDAO.searchVacation(vacationSearch);
 	}

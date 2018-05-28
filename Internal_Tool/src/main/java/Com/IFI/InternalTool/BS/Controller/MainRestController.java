@@ -61,7 +61,7 @@ public class MainRestController {
 	@RequestMapping("/saveEmployee")
 	public @ResponseBody Payload saveEmployee(@RequestBody Employee employee) {
 		Payload message = new Payload();
-		if (employeeService.saveEmployee(employee)) {
+		if (employeeService.saveEmployee(employee)>0) {
 			message.setDescription("Save or Update employee successfully");
 			message.setCode("CODE OK!");
 			message.setStatus("OK!");
@@ -78,7 +78,7 @@ public class MainRestController {
 	@RequestMapping("/deleteEmployee")
 	public @ResponseBody Payload deleteEmployee(@RequestParam long employee_id) {
 		Payload message = new Payload();
-		if (employeeService.deleteEmployee(employee_id)) {
+		if (employeeService.deleteEmployee(employee_id)>0) {
 			message.setDescription("Delete employee successfully");
 			message.setCode("CODE OK!");
 			message.setStatus("OK!");
@@ -202,7 +202,6 @@ public class MainRestController {
 							vacation.setCreated_at(date);
 							vacation.setUpdated_at(date);
 							vacation.setStatus(1);
-							vacation.setIs_updateable(true); 
 							vacationService.saveVacation(vacation);
 							Vacation_approved va=new Vacation_approved();
 							va.setVacation_id(vacation.getVacation_id());
@@ -233,7 +232,6 @@ public class MainRestController {
 							vacation.setCreated_at(date);
 							vacation.setUpdated_at(date);
 							vacation.setStatus(1);
-							vacation.setIs_updateable(true);
 							vacationService.saveVacation(vacation);
 							Vacation_approved va=new Vacation_approved();
 							va.setVacation_id(vacation.getVacation_id());
@@ -265,7 +263,7 @@ public class MainRestController {
 	public @ResponseBody Payload editVacation(@RequestBody Vacation vacation) {
 		Payload message = new Payload();
 
-		if (vacation.getIs_updateable() == true) {
+		if (vacation.getStatus() == 1) {
 			Date date = new java.util.Date();
 			vacation.setUpdated_at(date);
 			if (vacationService.saveVacation(vacation)) {
@@ -288,7 +286,7 @@ public class MainRestController {
 	public @ResponseBody Payload deleteVacation(@RequestParam long vacation_id) {
 		Payload message = new Payload();
 		Vacation v = vacationService.getVacationById(vacation_id);
-		if (v.getIs_updateable() == true)
+		if (v.getStatus() == 1)
 		{
 			if (vacationService.deleteVacation(vacation_id)) {
 				message.setDescription("Delete vacation successfully");
@@ -305,7 +303,7 @@ public class MainRestController {
 	}
 	
 	
-	//search
+	//search page  manager/leader
 	
 
 	@RequestMapping("/searchVacation")
@@ -327,6 +325,41 @@ public class MainRestController {
 		}
 		return message;
 	}
+	
+	//search page employee
+	
+	@RequestMapping("/searchVacationP2")
+	public @ResponseBody Payload searchVacationP2(@RequestParam Long employee_id,@RequestBody VacationSearch vacationSearch) {
+		Payload message = new Payload();
+		List<Vacation> list = vacationService.searchVacationP2(employee_id,vacationSearch);
+		if (list.size()>0)
+			{
+				message.setDescription("Search vacation successfully");
+				message.setCode("CODE OK!");
+				message.setStatus("OK!");
+				message.setData(list);
+			} 
+	
+		else {
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setDescription("No result!");
+		}
+		return message;
+	}
+	
+	
+	//get vacation by employee to approve
+	@RequestMapping("/getEmployeeVacationByManager")
+	public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id) {
+		List<List<Vacation>> listVacation=new ArrayList<List<Vacation>>();
+		List<Long> listEmp= employeeService.getEmployeeByManager(manager_id);
+		for(Long a:listEmp) {
+			listVacation.add(vacationService.getAllVacationByEmp(a));
+		}
+		return listVacation;
+	}
+	
 	
 	/*-----------End Vacation MainRestController--------*/
 	

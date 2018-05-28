@@ -10,7 +10,7 @@ import Com.IFI.InternalTool.DS.Model.Project_manager;
 @Repository
 public interface ProjectDAO {
 	List<Project> getAllProject();
-	boolean saveProject(Project project);
+	Long saveProject(Project project);
 	boolean deleteProject(long project_id);
 	Project getProjectById(long project_id);
 	List<Project_manager> getProjectManagerByEmp(long employee_id,long project_id);
