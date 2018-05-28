@@ -85,13 +85,17 @@ public class VacationDAOImpl implements VacationDAO{
 	@Override
 	public List<Vacation> searchVacation(VacationSearch vacationSearch) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id WHERE (:status IS NULL OR v.status=:status) ";
-		hql+="AND (:emp_name IS NULL OR e.fullname=:emp_name)";
+		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id ";
+		hql+="WHERE (:emp_name IS NULL OR e.fullname LIKE CONCAT('%', :emp_name, '%')) ";
+		hql+="AND (:status =0 or v.status=:status) ";
+		hql+="AND (:pro_name IS NULL OR p.name LIKE CONCAT('%', :pro_name, '%')) ";
+		hql+="AND (:from_date IS NULL or DATE_FORMAT(v.from_date, '%Y-%m-%d')=DATE_FORMAT(:from_date, '%Y-%m-%d') ) ";
+		hql+="AND (:to_date IS NULL or DATE_FORMAT(v.to_date, '%Y-%m-%d')=DATE_FORMAT(:to_date, '%Y-%m-%d') ) ";
 		Query query = session.createQuery(hql);
 		query.setParameter("emp_name", vacationSearch.getEmp_name());
-		//query.setParameter("pro_name", vacationSearch.getPro_name());
-		//query.setParameter("from_date", vacationSearch.getFrom_date());
-		//query.setParameter("to_date", vacationSearch.getTo_date());
+		query.setParameter("pro_name", vacationSearch.getPro_name());
+		query.setParameter("from_date", vacationSearch.getFrom_date());
+		query.setParameter("to_date", vacationSearch.getTo_date());
 		query.setParameter("status", vacationSearch.getStatus());
 		List<Vacation> list=query.list();
 		session.close();
