@@ -16,6 +16,7 @@ import Com.IFI.InternalTool.DS.DAO.VacationDAO;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
 import Com.IFI.InternalTool.DS.Model.Vacation_type;
+import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 @Repository("VacationDAO")
 @Transactional
 public class VacationDAOImpl implements VacationDAO{
@@ -80,6 +81,22 @@ public class VacationDAOImpl implements VacationDAO{
 		List<Vacation_type> list=query.list();
 		session.close();
 		return list;
+	}
+	@Override
+	public List<Vacation> searchVacation(VacationSearch vacationSearch) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id WHERE (:status IS NULL OR v.status=:status) ";
+		hql+="AND (:emp_name IS NULL OR e.fullname=:emp_name)";
+		Query query = session.createQuery(hql);
+		query.setParameter("emp_name", vacationSearch.getEmp_name());
+		//query.setParameter("pro_name", vacationSearch.getPro_name());
+		//query.setParameter("from_date", vacationSearch.getFrom_date());
+		//query.setParameter("to_date", vacationSearch.getTo_date());
+		query.setParameter("status", vacationSearch.getStatus());
+		List<Vacation> list=query.list();
+		session.close();
+		return list;
+		
 	}
 
 }

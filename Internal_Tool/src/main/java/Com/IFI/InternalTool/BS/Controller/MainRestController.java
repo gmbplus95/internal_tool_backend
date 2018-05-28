@@ -21,6 +21,7 @@ import Com.IFI.InternalTool.DS.Model.Project_manager;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
 import Com.IFI.InternalTool.DS.Model.Vacation_type;
+import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 
 @RestController
 public class MainRestController {
@@ -299,6 +300,30 @@ public class MainRestController {
 		else {
 			message.setStatus("Error!");
 			message.setDescription("Vacation is processing, You can not delete");
+		}
+		return message;
+	}
+	
+	
+	//search
+	
+
+	@RequestMapping("/searchVacation")
+	public @ResponseBody Payload searchVacation(@RequestBody VacationSearch vacationSearch) {
+		Payload message = new Payload();
+		List<Vacation> list = vacationService.searchVacation(vacationSearch);
+		if (list.size()>0)
+			{
+				message.setDescription("Search vacation successfully");
+				message.setCode("CODE OK!");
+				message.setStatus("OK!");
+				message.setData(list);
+			} 
+	
+		else {
+			message.setCode("CODE OK!");
+			message.setStatus("OK!");
+			message.setDescription("No result!");
 		}
 		return message;
 	}

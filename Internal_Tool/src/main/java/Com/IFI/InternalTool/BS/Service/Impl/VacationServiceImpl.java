@@ -10,6 +10,7 @@ import Com.IFI.InternalTool.DS.DAO.VacationDAO;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
 import Com.IFI.InternalTool.DS.Model.Vacation_type;
+import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 @Service("VacationService")
 public class VacationServiceImpl implements VacationService{
 	@Autowired
@@ -37,6 +38,10 @@ public class VacationServiceImpl implements VacationService{
 	@Override
 	public List<Vacation_type> getAllVacationType() {
 		return vacationDAO.getAllVacationType();
+	}
+	@Override
+	public List<Vacation> searchVacation(VacationSearch vacationSearch) {
+		return vacationDAO.searchVacation(vacationSearch);
 	}
 
 }

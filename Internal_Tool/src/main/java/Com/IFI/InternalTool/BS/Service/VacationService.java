@@ -5,6 +5,7 @@ import java.util.List;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_approved;
 import Com.IFI.InternalTool.DS.Model.Vacation_type;
+import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 
 public interface VacationService {
 	List<Vacation> getAllVacationByEmp(long employee_id);
@@ -13,5 +14,6 @@ public interface VacationService {
 	Vacation getVacationById(long vacation_id);
 	void saveVacationApproved(Vacation_approved vacation_approved);
 	List<Vacation_type> getAllVacationType();
+	List<Vacation> searchVacation(VacationSearch vacationSearch);
 
 }
