@@ -118,7 +118,6 @@ public class VacationDAOImpl implements VacationDAO{
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
 		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id ";
 		hql+="WHERE (:pro_name IS NULL OR p.name LIKE CONCAT('%', :pro_name, '%')) ";
-		hql+="AND (:emp_name IS NULL) ";
 		hql+="AND (:status =0 or v.status=:status) ";
 		hql+="AND ((:from_date IS NULL and ( :to_date IS NOT NULL and (:to_date> v.to_date) or (:to_date<v.to_date and :to_date>=v.from_date))) "; 
 		hql+="or (:to_date IS NULL and (:from_date IS NOT NULL and :from_date <= v.to_date)) ";
@@ -130,7 +129,6 @@ public class VacationDAOImpl implements VacationDAO{
 		hql+="AND (v.employee_id=:employee_id)";
 		Query query = session.createQuery(hql);
 		query.setParameter("employee_id", employee_id);
-		query.setParameter("emp_name", vacationSearch.getEmp_name());
 		query.setParameter("pro_name", vacationSearch.getPro_name());
 		query.setParameter("from_date", vacationSearch.getFrom_date());
 		query.setParameter("to_date", vacationSearch.getTo_date());

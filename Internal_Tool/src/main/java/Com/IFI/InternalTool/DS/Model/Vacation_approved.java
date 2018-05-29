@@ -19,8 +19,6 @@ public class Vacation_approved implements Serializable{
 	private long manager_id;
 	@Column(name = "vacation_id")
 	private long vacation_id;
-	@Column(name = "is_approve")
-	private Boolean is_approve;
 	@Column(name = "priority")
 	private int priority;
 	public long getManager_id() {
@@ -42,12 +40,7 @@ public class Vacation_approved implements Serializable{
 	public void setVacation_approved_id(long vacation_approved_id) {
 		this.vacation_approved_id = vacation_approved_id;
 	}
-	public Boolean getIs_approve() {
-		return is_approve;
-	}
-	public void setIs_approve(Boolean is_approve) {
-		this.is_approve = is_approve;
-	}
+
 	public int getPriority() {
 		return priority;
 	}
@@ -55,11 +48,10 @@ public class Vacation_approved implements Serializable{
 		this.priority = priority;
 	}
 	
-	public Vacation_approved(long manager_id, long vacation_id, Boolean is_approve, int priority) {
+	public Vacation_approved(long manager_id, long vacation_id, int priority) {
 		super();
 		this.manager_id = manager_id;
 		this.vacation_id = vacation_id;
-		this.is_approve = is_approve;
 		this.priority = priority;
 	}
 	public Vacation_approved() {
