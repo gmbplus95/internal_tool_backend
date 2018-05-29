@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="user_role")
-public class User_role implements Serializable{
+public class User_Role implements Serializable{
 	@Id
 	@Column(name = "user_role_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,10 @@ public class User_role implements Serializable{
 	public void setRole_id(long role_id) {
 		this.role_id = role_id;
 	}
-	public User_role() {
+	public User_Role() {
 		super();
 	}
-	public User_role(long employee_id, long role_id) {
+	public User_Role(long employee_id, long role_id) {
 		super();
 		this.employee_id = employee_id;
 		this.role_id = role_id;
