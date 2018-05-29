@@ -7,7 +7,7 @@ import Com.IFI.InternalTool.DS.Model.Group_ifi;
 
 public interface EmployeeService {
 
-	List<Employee>  getAllEmployee();
+	List<Employee>  getAllEmployee(int page, int pageSize,String sortedColumn,Boolean desc);
 	Long saveEmployee(Employee employee);
 	Long deleteEmployee(long employee_id);
 	Employee getEmployeeById(long employee_id);

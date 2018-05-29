@@ -35,8 +35,12 @@ public class MainRestController {
 
 	// get all employee data
 	@RequestMapping("/getAllEmployee")
-	public List<Employee> getAllEmployee() {
-		return employeeService.getAllEmployee();
+	public List<Employee> getAllEmployee(@RequestParam ("page") int page,
+										 @RequestParam ("pageSize") int pageSize,
+										 @RequestParam ("sortedColumn") String sortedColumn,
+										 @RequestParam ("desc") Boolean desc) {
+			return employeeService.getAllEmployee(page-1,pageSize,sortedColumn,desc);
+		
 	}
 
 	// get all Group
@@ -164,13 +168,17 @@ public class MainRestController {
 	/*-----------Begin Vacation MainRestController--------*/
 	//get all vacation (employee page)
 	@RequestMapping("/getVacationByEmp")
-	public @ResponseBody Payload getVacationByEmp(@RequestParam long employee_id) {
+	public @ResponseBody Payload getVacationByEmp(@RequestParam long employee_id,
+												  @RequestParam ("page") int page,
+												  @RequestParam ("pageSize") int pageSize,
+												  @RequestParam ("sortedColumn") String sortedColumn,
+												  @RequestParam ("desc") Boolean desc) {
 		Payload message = new Payload();
-		vacationService.getAllVacationByEmp(employee_id);
+		vacationService.getAllVacationByEmp(employee_id,page,pageSize,sortedColumn,desc);
 		message.setDescription("Get vacation by employee successfully");
 		message.setCode("CODE OK!");
 		message.setStatus("OK!");
-		message.setData(vacationService.getAllVacationByEmp(employee_id));
+		message.setData(vacationService.getAllVacationByEmp(employee_id,page,pageSize,sortedColumn,desc));
 
 		return message;
 	}
@@ -302,13 +310,21 @@ public class MainRestController {
 	
 	//get vacation  ( manager/leader page)
 		@RequestMapping("/getEmployeeVacationByManager")
-		public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id) {
+		public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id,
+																@RequestParam ("page") int page,
+																@RequestParam ("pageSize") int pageSize,
+																@RequestParam ("sortedColumn") String sortedColumn,
+																@RequestParam ("desc") Boolean desc) {
 			List<List<Vacation>> listVacation=new ArrayList<List<Vacation>>();
 			List<Long> listEmp= employeeService.getEmployeeByManager(manager_id);
 			for(Long a:listEmp) {
-				listVacation.add(vacationService.getAllVacationByEmp2(a,manager_id));
+				listVacation.add(vacationService.getAllVacationByEmp2(a,manager_id,sortedColumn,desc));
 			}
-			return listVacation;
+			
+			int start = Math.min(Math.max(pageSize * (page - 1), 0), listVacation.size());
+			int end = Math.min(Math.max(pageSize * page, start), listVacation.size());
+			return  listVacation.subList(start, end);
+
 		}
 		
 		//approve a request
@@ -346,9 +362,14 @@ public class MainRestController {
 	
 
 	@RequestMapping("/searchVacation")
-	public @ResponseBody Payload searchVacation(@RequestParam Long manager_id,@RequestBody VacationSearch vacationSearch) {
+	public @ResponseBody Payload searchVacation(@RequestParam Long manager_id,
+												@RequestParam ("page") int page,
+												@RequestParam ("pageSize") int pageSize,
+												@RequestParam ("sortedColumn") String sortedColumn,
+												@RequestParam ("desc") Boolean desc,
+												@RequestBody VacationSearch vacationSearch) {
 		Payload message = new Payload();
-		List<Vacation> list = vacationService.searchVacation(manager_id,vacationSearch);
+		List<Vacation> list = vacationService.searchVacation(manager_id,page,pageSize,sortedColumn,desc,vacationSearch);
 		if (list.size()>0)
 			{
 				message.setDescription("Search vacation successfully");
@@ -368,9 +389,14 @@ public class MainRestController {
 	//search page employee
 	
 	@RequestMapping("/searchVacationP2")
-	public @ResponseBody Payload searchVacationP2(@RequestParam Long employee_id,@RequestBody VacationSearch vacationSearch) {
+	public @ResponseBody Payload searchVacationP2(  @RequestParam Long employee_id,
+													@RequestParam ("page") int page,
+													@RequestParam ("pageSize") int pageSize,
+													@RequestParam ("sortedColumn") String sortedColumn,
+													@RequestParam ("desc") Boolean desc,
+													@RequestBody VacationSearch vacationSearch) {
 		Payload message = new Payload();
-		List<Vacation> list = vacationService.searchVacationP2(employee_id,vacationSearch);
+		List<Vacation> list = vacationService.searchVacationP2(employee_id,page,pageSize,sortedColumn,desc,vacationSearch);
 		if (list.size()>0)
 			{
 				message.setDescription("Search vacation successfully");

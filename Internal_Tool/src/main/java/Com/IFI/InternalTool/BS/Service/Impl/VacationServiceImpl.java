@@ -16,8 +16,8 @@ public class VacationServiceImpl implements VacationService{
 	@Autowired
 	VacationDAO vacationDAO;
 	@Override
-	public List<Vacation> getAllVacationByEmp(long employee_id) {
-		return vacationDAO.getAllVacationByEmp(employee_id);
+	public List<Vacation> getAllVacationByEmp(long employee_id,int page, int pageSize,String sortedColumn,Boolean desc) {
+		return vacationDAO.getAllVacationByEmp(employee_id, page, pageSize, sortedColumn, desc);
 	}
 	@Override
 	public boolean saveVacation(Vacation vacation) {
@@ -40,12 +40,12 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.getAllVacationType();
 	}
 	@Override
-	public List<Vacation> searchVacationP2(Long employee_id,VacationSearch vacationSearch) {
-		return vacationDAO.searchVacationP2(employee_id,vacationSearch);
+	public List<Vacation> searchVacationP2(Long employee_id,int page, int pageSize,String sortedColumn,Boolean desc,VacationSearch vacationSearch) {
+		return vacationDAO.searchVacationP2(employee_id,page, pageSize, sortedColumn, desc,vacationSearch);
 	}
 	@Override
-	public List<Vacation> searchVacation(Long manager_id,VacationSearch vacationSearch) {
-		return vacationDAO.searchVacation(manager_id,vacationSearch);
+	public List<Vacation> searchVacation(Long manager_id,int page, int pageSize,String sortedColumn,Boolean desc,VacationSearch vacationSearch) {
+		return vacationDAO.searchVacation(manager_id,page, pageSize, sortedColumn, desc,vacationSearch);
 	}
 	@Override
 	public int getMaxPriority(long vacation_id) {
@@ -56,8 +56,9 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.getPriority(manager_id, vacation_id);
 	}
 	@Override
-	public List<Vacation> getAllVacationByEmp2(long vacation_id,long manager_id) {
-		return vacationDAO.getAllVacationByEmp2(vacation_id,manager_id);
+	public List<Vacation> getAllVacationByEmp2(long employee_id,long manager_id,String sortedColumn,Boolean desc) {
+		return vacationDAO.getAllVacationByEmp2(employee_id, manager_id, sortedColumn, desc);
+	
 	}
 
 }

@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="allocation_detail")
-public class Allocation_detail implements Serializable {
+public class Allocation_Detail implements Serializable {
 	@Id
 	@Column(name = "allocation_detail_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +25,14 @@ public class Allocation_detail implements Serializable {
 	private Date date;
 	@Column(name = "time")
 	private int time;
-	public Allocation_detail(long project_id, long employee_id, Date date, int time) {
+	public Allocation_Detail(long project_id, long employee_id, Date date, int time) {
 		super();
 		this.project_id = project_id;
 		this.employee_id = employee_id;
 		this.date = date;
 		this.time = time;
 	}
-	public Allocation_detail() {
+	public Allocation_Detail() {
 		super();
 	}
 	public long getAllocation_detail_id() {

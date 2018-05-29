@@ -8,7 +8,7 @@ import Com.IFI.InternalTool.DS.Model.Employee;
 import Com.IFI.InternalTool.DS.Model.Group_ifi;
 @Repository
 public interface EmployeeDAO{
-	List<Employee> getAllEmployee();
+	List<Employee> getAllEmployee(int page,int pageSize,String sortedColumn,Boolean desc);
 	Long saveEmployee(Employee employee);
 	Long deleteEmployee(long employee_id);
 	Employee getEmployeeById(long employee_id);

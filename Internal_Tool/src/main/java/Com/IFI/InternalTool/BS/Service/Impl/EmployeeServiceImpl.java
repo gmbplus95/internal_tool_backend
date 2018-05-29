@@ -16,8 +16,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeDAO employeeDAO;
 	@Override
-	public List<Employee> getAllEmployee() {
-		return employeeDAO.getAllEmployee();
+	public List<Employee> getAllEmployee(int page, int pageSize,String sortedColumn,Boolean desc) {
+//		List<Employee> list= employeeDAO.getAllEmployee(sortedColumn,desc);
+//		int from = Math.max(0,page*pageSize);
+//		int to = Math.min(list.size(),(page+1)*pageSize);
+//		return list.subList(from,to); 
+		return employeeDAO.getAllEmployee(page, pageSize, sortedColumn, desc);
 	}
 	@Override
 	public Long saveEmployee(Employee employee) {

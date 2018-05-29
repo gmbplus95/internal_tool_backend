@@ -22,12 +22,24 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 	@Override
-	public List<Employee> getAllEmployee() {
+	public List<Employee> getAllEmployee(int page,int pageSize,String sortedColumn,Boolean desc) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Employee";
+		String hql = "FROM Employee ";
+		if(sortedColumn != null && desc != null){
+			String order = "";
+			if(desc){
+				order = "desc";
+			}
+			hql +="ORDER BY "+ sortedColumn + " " +  order;
+		}
 		Query query = session.createQuery(hql);
-		//query.setParameter("userId", userId);
+		query.setFirstResult(page * pageSize);
+		query.setFetchSize(pageSize);
+		query.setMaxResults((page + 1) * pageSize);
 		List<Employee> list = query.list();
+		if(list.size() > pageSize){
+			return list = list.subList(0, pageSize);
+		}
 		session.close();
 		return list;
 	}
@@ -77,7 +89,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	@Override
 	public List<Long> getEmployeeByManager(long manager_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "Select employee_id from Project_manager where manager_id=:manager_id";
+		String hql = "Select distinct employee_id from Project_manager where manager_id=:manager_id";
 		Query query = session.createQuery(hql);
 		query.setParameter("manager_id", manager_id);
 		List<Long> list=query.list();
