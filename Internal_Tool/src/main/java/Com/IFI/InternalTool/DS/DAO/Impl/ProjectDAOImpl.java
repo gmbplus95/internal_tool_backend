@@ -87,4 +87,15 @@ public class ProjectDAOImpl implements ProjectDAO {
 		return list;
 	}
 
+	@Override
+	public List<Project_manager> getProjectManagerById(long manager_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "FROM Project_manager where manager_id=:manager_id";
+		Query query = session.createQuery(hql);
+		query.setParameter("manager_id", manager_id);
+		List<Project_manager> pm = query.list();
+		session.close();
+		return pm;
+	}
+
 }

@@ -138,5 +138,36 @@ public class VacationDAOImpl implements VacationDAO{
 		return list;
 		
 	}
+	@Override
+	public int getMaxPriority(long vacation_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select MAX(t.priority) from Vacation_approved t where vacation_id=:vacation_id";
+		Query query = session.createQuery(hql);
+		query.setParameter("vacation_id", vacation_id);
+		int max=(int) query.uniqueResult();
+		return max;
+	}
+	@Override
+	public int getPriority(long manager_id,long vacation_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select t.priority from Vacation_approved t where manager_id=:manager_id and vacation_id=:vacation_id";
+		Query query = session.createQuery(hql);
+		query.setParameter("manager_id", manager_id);
+		query.setParameter("vacation_id", vacation_id);
+		int p=(int) query.uniqueResult();
+		return p;
+	}
+	@Override
+	public List<Vacation> getAllVacationByEmp2(long employee_id,long manager_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select t From Vacation t INNER JOIN Project_manager AS pm ON (t.employee_id=pm.employee_id and t.project_id=pm.project_id)  where  (t.employee_id=:employee_id and pm.manager_id=:manager_id and t.status=pm.priority)";
+		Query query = session.createQuery(hql);
+		query.setParameter("employee_id", employee_id);
+		query.setParameter("manager_id", manager_id);
+		List<Vacation> list=query.list();
+		session.close();
+		return list;
+	}
 
 }
+

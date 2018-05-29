@@ -16,4 +16,7 @@ public interface VacationDAO {
 		List<Vacation_type> getAllVacationType();
 		List<Vacation> searchVacation(VacationSearch vacationSearch);
 		List<Vacation> searchVacationP2(Long employee_id,VacationSearch vacationSearch);
+		int getMaxPriority(long vacation_id);
+		int getPriority(long manager_id,long vacation_id);
+		List<Vacation> getAllVacationByEmp2(long employee_id,long manager_id);
 }

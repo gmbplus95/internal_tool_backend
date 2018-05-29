@@ -162,7 +162,7 @@ public class MainRestController {
 	/*-----------End Project MainRestController--------*/
 
 	/*-----------Begin Vacation MainRestController--------*/
-
+	//get all vacation (employee page)
 	@RequestMapping("/getVacationByEmp")
 	public @ResponseBody Payload getVacationByEmp(@RequestParam long employee_id) {
 		Payload message = new Payload();
@@ -202,6 +202,7 @@ public class MainRestController {
 							vacation.setCreated_at(date);
 							vacation.setUpdated_at(date);
 							vacation.setStatus(1);
+							vacation.setIs_approved(null);
 							vacationService.saveVacation(vacation);
 							Vacation_approved va=new Vacation_approved();
 							va.setVacation_id(vacation.getVacation_id());
@@ -263,7 +264,7 @@ public class MainRestController {
 	public @ResponseBody Payload editVacation(@RequestBody Vacation vacation) {
 		Payload message = new Payload();
 
-		if (vacation.getStatus() == 1) {
+		if (vacation.getStatus() == 1 && vacation.getIs_approved()==null) {
 			Date date = new java.util.Date();
 			vacation.setUpdated_at(date);
 			if (vacationService.saveVacation(vacation)) {
@@ -286,7 +287,7 @@ public class MainRestController {
 	public @ResponseBody Payload deleteVacation(@RequestParam long vacation_id) {
 		Payload message = new Payload();
 		Vacation v = vacationService.getVacationById(vacation_id);
-		if (v.getStatus() == 1)
+		if (v.getStatus() == 1 && v.getIs_approved()==null)
 		{
 			if (vacationService.deleteVacation(vacation_id)) {
 				message.setDescription("Delete vacation successfully");
@@ -349,18 +350,45 @@ public class MainRestController {
 	}
 	
 	
-	//get vacation by employee to approve
+	//get vacation  ( manager/leader page)
 	@RequestMapping("/getEmployeeVacationByManager")
 	public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id) {
 		List<List<Vacation>> listVacation=new ArrayList<List<Vacation>>();
 		List<Long> listEmp= employeeService.getEmployeeByManager(manager_id);
 		for(Long a:listEmp) {
-			listVacation.add(vacationService.getAllVacationByEmp(a));
+			listVacation.add(vacationService.getAllVacationByEmp2(a,manager_id));
 		}
 		return listVacation;
 	}
 	
+	//approve a request
+	@RequestMapping("/approveEmployeeRequest")
+	public Vacation approveEmployeeRequest(@RequestParam("manager_id") long manager_id, @RequestParam("vacation_id") long vacation_id) {
+			Vacation v=vacationService.getVacationById(vacation_id);
+			int max=vacationService.getMaxPriority(vacation_id);
+			int my_prio=vacationService.getPriority(manager_id, vacation_id);
+			if(my_prio<max) {
+				v.setStatus(my_prio+1);
+				v.setIs_approved(false);
+				vacationService.saveVacation(v);
+			}
+			if(my_prio==max) {
+				v.setStatus(max);
+				v.setIs_approved(true);
+				vacationService.saveVacation(v);
+			}
+			return v;
+	}
 	
+	//disapprove a request
+		@RequestMapping("/disapproveEmployeeRequest")
+		public Vacation disapproveEmployeeRequest( @RequestParam("vacation_id") long vacation_id) {
+				Vacation v=vacationService.getVacationById(vacation_id);
+				v.setStatus(-1);
+				v.setIs_approved(false);
+				vacationService.saveVacation(v);
+				return v;
+		}
 	/*-----------End Vacation MainRestController--------*/
 	
 	
