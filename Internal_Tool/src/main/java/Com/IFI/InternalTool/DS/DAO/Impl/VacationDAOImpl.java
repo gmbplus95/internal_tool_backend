@@ -85,9 +85,9 @@ public class VacationDAOImpl implements VacationDAO{
 	
 	//search manager page
 	@Override
-	public List<Vacation> searchVacation( VacationSearch vacationSearch) {
+	public List<Vacation> searchVacation(Long manager_id, VacationSearch vacationSearch) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id ";
+		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id INNER JOIN Project_manager pm ON (pm.employee_id=v.employee_id and pm.project_id=v.project_id and pm.priority=v.status) ";
 		hql+="WHERE (:emp_name IS NULL OR e.fullname LIKE CONCAT('%', :emp_name, '%')) ";
 		hql+="AND (:status =0 or v.status=:status) ";
 		hql+="AND (:pro_name IS NULL OR p.name LIKE CONCAT('%', :pro_name, '%')) ";
@@ -97,8 +97,10 @@ public class VacationDAOImpl implements VacationDAO{
 		hql+="or (:from_date <= v.from_date and :to_date >= v.from_date and :to_date <= v.to_date and :from_date <= :to_date) ";
 		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.to_date and :from_date <= :to_date)";
 		hql+="or (:from_date <= v.from_date and :to_date >= v.to_date and :from_date <= :to_date)";
-		hql+="or (:from_date IS NULL and :to_date IS NULL))";
+		hql+="or (:from_date IS NULL and :to_date IS NULL)) ";
+		hql+="AND (pm.manager_id=:manager_id)";
 		Query query = session.createQuery(hql);
+		query.setParameter("manager_id", manager_id);
 		query.setParameter("emp_name", vacationSearch.getEmp_name());
 		query.setParameter("pro_name", vacationSearch.getPro_name());
 		query.setParameter("from_date", vacationSearch.getFrom_date());

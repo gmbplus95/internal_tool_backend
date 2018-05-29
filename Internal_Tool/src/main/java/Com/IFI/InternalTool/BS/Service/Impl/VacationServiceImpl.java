@@ -44,8 +44,8 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.searchVacationP2(employee_id,vacationSearch);
 	}
 	@Override
-	public List<Vacation> searchVacation(VacationSearch vacationSearch) {
-		return vacationDAO.searchVacation(vacationSearch);
+	public List<Vacation> searchVacation(Long manager_id,VacationSearch vacationSearch) {
+		return vacationDAO.searchVacation(manager_id,vacationSearch);
 	}
 	@Override
 	public int getMaxPriority(long vacation_id) {

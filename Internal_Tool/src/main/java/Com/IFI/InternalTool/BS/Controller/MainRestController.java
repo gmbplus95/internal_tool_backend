@@ -250,10 +250,7 @@ public class MainRestController {
 							message.setStatus("Error");
 						}
 				}
-				//end_date=null
-				
-			
-				
+		
 			}
 		
 		return message;
@@ -303,14 +300,55 @@ public class MainRestController {
 		return message;
 	}
 	
+	//get vacation  ( manager/leader page)
+		@RequestMapping("/getEmployeeVacationByManager")
+		public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id) {
+			List<List<Vacation>> listVacation=new ArrayList<List<Vacation>>();
+			List<Long> listEmp= employeeService.getEmployeeByManager(manager_id);
+			for(Long a:listEmp) {
+				listVacation.add(vacationService.getAllVacationByEmp2(a,manager_id));
+			}
+			return listVacation;
+		}
+		
+		//approve a request
+		@RequestMapping("/approveEmployeeRequest")
+		public Vacation approveEmployeeRequest(@RequestParam("manager_id") long manager_id, @RequestParam("vacation_id") long vacation_id) {
+				Vacation v=vacationService.getVacationById(vacation_id);
+				int max=vacationService.getMaxPriority(vacation_id);
+				int my_prio=vacationService.getPriority(manager_id, vacation_id);
+				if(my_prio<max) {
+					v.setStatus(my_prio+1);
+					v.setIs_approved(false);
+					vacationService.saveVacation(v);
+				}
+				if(my_prio==max) {
+					v.setStatus(max);
+					v.setIs_approved(true);
+					vacationService.saveVacation(v);
+				}
+				return v;
+		}
+		
+		//disapprove a request
+			@RequestMapping("/disapproveEmployeeRequest")
+			public Vacation disapproveEmployeeRequest( @RequestParam("vacation_id") long vacation_id) {
+					Vacation v=vacationService.getVacationById(vacation_id);
+					v.setStatus(-1);
+					v.setIs_approved(false);
+					vacationService.saveVacation(v);
+					return v;
+			}
+	
+	
 	
 	//search page  manager/leader
 	
 
 	@RequestMapping("/searchVacation")
-	public @ResponseBody Payload searchVacation(@RequestBody VacationSearch vacationSearch) {
+	public @ResponseBody Payload searchVacation(@RequestParam Long manager_id,@RequestBody VacationSearch vacationSearch) {
 		Payload message = new Payload();
-		List<Vacation> list = vacationService.searchVacation(vacationSearch);
+		List<Vacation> list = vacationService.searchVacation(manager_id,vacationSearch);
 		if (list.size()>0)
 			{
 				message.setDescription("Search vacation successfully");
@@ -350,45 +388,7 @@ public class MainRestController {
 	}
 	
 	
-	//get vacation  ( manager/leader page)
-	@RequestMapping("/getEmployeeVacationByManager")
-	public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id) {
-		List<List<Vacation>> listVacation=new ArrayList<List<Vacation>>();
-		List<Long> listEmp= employeeService.getEmployeeByManager(manager_id);
-		for(Long a:listEmp) {
-			listVacation.add(vacationService.getAllVacationByEmp2(a,manager_id));
-		}
-		return listVacation;
-	}
 	
-	//approve a request
-	@RequestMapping("/approveEmployeeRequest")
-	public Vacation approveEmployeeRequest(@RequestParam("manager_id") long manager_id, @RequestParam("vacation_id") long vacation_id) {
-			Vacation v=vacationService.getVacationById(vacation_id);
-			int max=vacationService.getMaxPriority(vacation_id);
-			int my_prio=vacationService.getPriority(manager_id, vacation_id);
-			if(my_prio<max) {
-				v.setStatus(my_prio+1);
-				v.setIs_approved(false);
-				vacationService.saveVacation(v);
-			}
-			if(my_prio==max) {
-				v.setStatus(max);
-				v.setIs_approved(true);
-				vacationService.saveVacation(v);
-			}
-			return v;
-	}
-	
-	//disapprove a request
-		@RequestMapping("/disapproveEmployeeRequest")
-		public Vacation disapproveEmployeeRequest( @RequestParam("vacation_id") long vacation_id) {
-				Vacation v=vacationService.getVacationById(vacation_id);
-				v.setStatus(-1);
-				v.setIs_approved(false);
-				vacationService.saveVacation(v);
-				return v;
-		}
 	/*-----------End Vacation MainRestController--------*/
 	
 	
