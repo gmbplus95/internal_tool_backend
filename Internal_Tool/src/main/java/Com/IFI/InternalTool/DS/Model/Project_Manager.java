@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="project_manager")
-public class Project_manager implements Serializable {
+public class Project_Manager implements Serializable {
 	@Id
 	@Column(name = "project_manager_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class Project_manager implements Serializable {
 	@Column(name="priority")
 	private int priority;
 	
-	public Project_manager(long manager_id, long employee_id, long project_id, String manager_role, int priority) {
+	public Project_Manager(long manager_id, long employee_id, long project_id, String manager_role, int priority) {
 		super();
 		this.manager_id = manager_id;
 		this.employee_id = employee_id;
@@ -65,7 +65,7 @@ public class Project_manager implements Serializable {
 	public void setPriority(int priority) {
 		this.priority = priority;
 	}
-	public Project_manager() {
+	public Project_Manager() {
 		super();
 	}
 	

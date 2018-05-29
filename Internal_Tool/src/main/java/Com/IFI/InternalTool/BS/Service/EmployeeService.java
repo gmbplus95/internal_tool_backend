@@ -3,7 +3,7 @@ package Com.IFI.InternalTool.BS.Service;
 import java.util.List;
 
 import Com.IFI.InternalTool.DS.Model.Employee;
-import Com.IFI.InternalTool.DS.Model.Group_ifi;
+import Com.IFI.InternalTool.DS.Model.Group_IFI;
 
 public interface EmployeeService {
 
@@ -11,7 +11,7 @@ public interface EmployeeService {
 	Long saveEmployee(Employee employee);
 	Long deleteEmployee(long employee_id);
 	Employee getEmployeeById(long employee_id);
-	List<Group_ifi>  getAllGroup();
+	List<Group_IFI>  getAllGroup();
 	List<Long> getEmployeeByManager(long manager_id);
 
 }

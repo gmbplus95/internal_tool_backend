@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import Com.IFI.InternalTool.BS.Service.ProjectService;
 import Com.IFI.InternalTool.DS.DAO.ProjectDAO;
 import Com.IFI.InternalTool.DS.Model.Project;
-import Com.IFI.InternalTool.DS.Model.Project_manager;
+import Com.IFI.InternalTool.DS.Model.Project_Manager;
 @Service("ProjectService")
 public class ProjectServiceImpl implements ProjectService{
 	@Autowired
@@ -34,7 +34,7 @@ public class ProjectServiceImpl implements ProjectService{
 	}
 
 	@Override
-	public List<Project_manager> getProjectManagerByEmp(long employee_id,long project_id) {
+	public List<Project_Manager> getProjectManagerByEmp(long employee_id,long project_id) {
 		return projectDAO.getProjectManagerByEmp(employee_id,project_id);
 	}
 	

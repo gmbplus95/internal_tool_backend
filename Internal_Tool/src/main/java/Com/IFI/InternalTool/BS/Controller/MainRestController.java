@@ -15,12 +15,12 @@ import Com.IFI.InternalTool.BS.Service.EmployeeService;
 import Com.IFI.InternalTool.BS.Service.ProjectService;
 import Com.IFI.InternalTool.BS.Service.VacationService;
 import Com.IFI.InternalTool.DS.Model.Employee;
-import Com.IFI.InternalTool.DS.Model.Group_ifi;
+import Com.IFI.InternalTool.DS.Model.Group_IFI;
 import Com.IFI.InternalTool.DS.Model.Project;
-import Com.IFI.InternalTool.DS.Model.Project_manager;
+import Com.IFI.InternalTool.DS.Model.Project_Manager;
 import Com.IFI.InternalTool.DS.Model.Vacation;
-import Com.IFI.InternalTool.DS.Model.Vacation_approved;
-import Com.IFI.InternalTool.DS.Model.Vacation_type;
+import Com.IFI.InternalTool.DS.Model.Vacation_Approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_Type;
 import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 
 @RestController
@@ -39,13 +39,13 @@ public class MainRestController {
 										 @RequestParam ("pageSize") int pageSize,
 										 @RequestParam ("sortedColumn") String sortedColumn,
 										 @RequestParam ("desc") Boolean desc) {
-			return employeeService.getAllEmployee(page-1,pageSize,sortedColumn,desc);
+			return employeeService.getAllEmployee(page,pageSize,sortedColumn,desc);
 		
 	}
 
 	// get all Group
 	@RequestMapping("/getAllGroup")
-	public List<Group_ifi> getAllGroup() {
+	public List<Group_IFI> getAllGroup() {
 		return employeeService.getAllGroup();
 	}
 
@@ -185,7 +185,7 @@ public class MainRestController {
 	//get all vacation type
 	
 	@RequestMapping("/getAllVacationType")
-	public List<Vacation_type> getAllVacationType() {
+	public List<Vacation_Type> getAllVacationType() {
 		return vacationService.getAllVacationType();
 	}
 	
@@ -194,8 +194,8 @@ public class MainRestController {
 	@RequestMapping("/saveVacation")
 	public @ResponseBody Payload saveVacation(@RequestBody Vacation vacation) {
 		Payload message = new Payload();		
-			List<Project_manager> pm= projectService.getProjectManagerByEmp(vacation.getEmployee_id(),vacation.getProject_id());
-			for(Project_manager u:pm) {
+			List<Project_Manager> pm= projectService.getProjectManagerByEmp(vacation.getEmployee_id(),vacation.getProject_id());
+			for(Project_Manager u:pm) {
 				Project p=projectService.getProjectById(u.getProject_id());//get project to check date
 				if(p.getEnd_date()!=null) {
 					Date end_date=p.getEnd_date();
@@ -212,7 +212,7 @@ public class MainRestController {
 							vacation.setStatus(1);
 							vacation.setIs_approved(null);
 							vacationService.saveVacation(vacation);
-							Vacation_approved va=new Vacation_approved();
+							Vacation_Approved va=new Vacation_Approved();
 							va.setVacation_id(vacation.getVacation_id());
 							va.setManager_id(u.getManager_id());
 							va.setPriority(u.getPriority());
@@ -242,7 +242,7 @@ public class MainRestController {
 							vacation.setUpdated_at(date);
 							vacation.setStatus(1);
 							vacationService.saveVacation(vacation);
-							Vacation_approved va=new Vacation_approved();
+							Vacation_Approved va=new Vacation_Approved();
 							va.setVacation_id(vacation.getVacation_id());
 							va.setManager_id(u.getManager_id());
 							va.setPriority(u.getPriority());
@@ -310,20 +310,13 @@ public class MainRestController {
 	
 	//get vacation  ( manager/leader page)
 		@RequestMapping("/getEmployeeVacationByManager")
-		public List<List<Vacation>> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id,
+		public List<Vacation> getEmployeeVacationByManager(@RequestParam("manager_id") long manager_id,
 																@RequestParam ("page") int page,
 																@RequestParam ("pageSize") int pageSize,
 																@RequestParam ("sortedColumn") String sortedColumn,
 																@RequestParam ("desc") Boolean desc) {
-			List<List<Vacation>> listVacation=new ArrayList<List<Vacation>>();
-			List<Long> listEmp= employeeService.getEmployeeByManager(manager_id);
-			for(Long a:listEmp) {
-				listVacation.add(vacationService.getAllVacationByEmp2(a,manager_id,sortedColumn,desc));
-			}
-			
-			int start = Math.min(Math.max(pageSize * (page - 1), 0), listVacation.size());
-			int end = Math.min(Math.max(pageSize * page, start), listVacation.size());
-			return  listVacation.subList(start, end);
+			List<Vacation> listVacation=vacationService.getAllVacationByEmp2(manager_id, page, pageSize, sortedColumn, desc);
+			return listVacation;
 
 		}
 		

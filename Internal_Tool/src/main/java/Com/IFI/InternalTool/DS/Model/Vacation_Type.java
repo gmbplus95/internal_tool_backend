@@ -11,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="vacation_type")
-public class Vacation_type implements Serializable{
+public class Vacation_Type implements Serializable{
 	@Id
 	@Column(name = "vacation_type_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,11 +30,11 @@ public class Vacation_type implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Vacation_type(String name) {
+	public Vacation_Type(String name) {
 		super();
 		this.name = name;
 	}
-	public Vacation_type() {
+	public Vacation_Type() {
 		super();
 	}
 	

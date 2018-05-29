@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="group_ifi")
-public class Group_ifi implements Serializable  {
+public class Group_IFI implements Serializable  {
 	@Id
 	@Column(name = "group_id")
 	private String group_id;
@@ -27,10 +27,10 @@ public class Group_ifi implements Serializable  {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Group_ifi() {
+	public Group_IFI() {
 		super();
 	}
-	public Group_ifi(String group_id, String name) {
+	public Group_IFI(String group_id, String name) {
 		super();
 		this.group_id = group_id;
 		this.name = name;

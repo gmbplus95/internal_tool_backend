@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import Com.IFI.InternalTool.DS.DAO.ProjectDAO;
 import Com.IFI.InternalTool.DS.Model.Project;
-import Com.IFI.InternalTool.DS.Model.Project_manager;
+import Com.IFI.InternalTool.DS.Model.Project_Manager;
 @Repository("ProjectDAO")
 @Transactional
 public class ProjectDAOImpl implements ProjectDAO {
@@ -67,20 +67,20 @@ public class ProjectDAOImpl implements ProjectDAO {
 	}
 
 	@Override
-	public List<Project_manager> getProjectManagerByEmp(long employee_id,long project_id) {
+	public List<Project_Manager> getProjectManagerByEmp(long employee_id,long project_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "Select distinct p FROM Project_manager p LEFT JOIN Vacation AS v ON p.employee_id=v.employee_id where p.employee_id=:employee_id and p.project_id=:project_id";
+		String hql = "Select distinct p FROM Project_Manager p LEFT JOIN Vacation AS v ON p.employee_id=v.employee_id where p.employee_id=:employee_id and p.project_id=:project_id";
 		Query query = session.createQuery(hql);
 		query.setParameter("employee_id", employee_id);
 		query.setParameter("project_id", project_id);
-		List<Project_manager> list=query.list();
+		List<Project_Manager> list=query.list();
 		return list;
 	}
 	
 	@Override
 	public List<Long> getProjectByEmp(long employee_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "Select distinct p.project_id FROM Project_manager p LEFT JOIN Vacation AS v ON p.employee_id=v.employee_id where p.employee_id=:employee_id";
+		String hql = "Select distinct p.project_id FROM Project_Manager p LEFT JOIN Vacation AS v ON p.employee_id=v.employee_id where p.employee_id=:employee_id";
 		Query query = session.createQuery(hql);
 		query.setParameter("employee_id", employee_id);
 		List<Long> list=query.list();
@@ -88,12 +88,12 @@ public class ProjectDAOImpl implements ProjectDAO {
 	}
 
 	@Override
-	public List<Project_manager> getProjectManagerById(long manager_id) {
+	public List<Project_Manager> getProjectManagerById(long manager_id) {
 		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-		String hql = "FROM Project_manager where manager_id=:manager_id";
+		String hql = "FROM Project_Manager where manager_id=:manager_id";
 		Query query = session.createQuery(hql);
 		query.setParameter("manager_id", manager_id);
-		List<Project_manager> pm = query.list();
+		List<Project_Manager> pm = query.list();
 		session.close();
 		return pm;
 	}

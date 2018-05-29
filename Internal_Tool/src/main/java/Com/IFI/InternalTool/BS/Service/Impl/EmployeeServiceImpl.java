@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import Com.IFI.InternalTool.BS.Service.EmployeeService;
 import Com.IFI.InternalTool.DS.DAO.EmployeeDAO;
 import Com.IFI.InternalTool.DS.Model.Employee;
-import Com.IFI.InternalTool.DS.Model.Group_ifi;
+import Com.IFI.InternalTool.DS.Model.Group_IFI;
 
 @Service("EmployeeService")
 public class EmployeeServiceImpl implements EmployeeService {
@@ -36,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDAO.getEmployeeById(employee_id);
 	}
 	@Override
-	public List<Group_ifi> getAllGroup() {
+	public List<Group_IFI> getAllGroup() {
 		return employeeDAO.getAllGroup();
 	}
 	@Override

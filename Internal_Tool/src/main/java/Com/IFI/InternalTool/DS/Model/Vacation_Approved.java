@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
 @Table(name="vacation_approved")
-public class Vacation_approved implements Serializable{
+public class Vacation_Approved implements Serializable{
 	@Id
 	@Column(name = "vacation_approved_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,13 +48,13 @@ public class Vacation_approved implements Serializable{
 		this.priority = priority;
 	}
 	
-	public Vacation_approved(long manager_id, long vacation_id, int priority) {
+	public Vacation_Approved(long manager_id, long vacation_id, int priority) {
 		super();
 		this.manager_id = manager_id;
 		this.vacation_id = vacation_id;
 		this.priority = priority;
 	}
-	public Vacation_approved() {
+	public Vacation_Approved() {
 		super();
 	}
 	

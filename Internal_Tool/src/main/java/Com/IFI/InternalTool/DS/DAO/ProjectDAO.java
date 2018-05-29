@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import Com.IFI.InternalTool.DS.Model.Project;
-import Com.IFI.InternalTool.DS.Model.Project_manager;
+import Com.IFI.InternalTool.DS.Model.Project_Manager;
 
 @Repository
 public interface ProjectDAO {
@@ -13,7 +13,7 @@ public interface ProjectDAO {
 	Long saveProject(Project project);
 	boolean deleteProject(long project_id);
 	Project getProjectById(long project_id);
-	List<Project_manager> getProjectManagerByEmp(long employee_id,long project_id);
+	List<Project_Manager> getProjectManagerByEmp(long employee_id,long project_id);
 	List<Long> getProjectByEmp(long employee_id);
-	List<Project_manager> getProjectManagerById(long manager_id);
+	List<Project_Manager> getProjectManagerById(long manager_id);
 }

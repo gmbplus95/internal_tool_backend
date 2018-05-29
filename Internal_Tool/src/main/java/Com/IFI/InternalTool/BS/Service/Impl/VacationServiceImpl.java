@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import Com.IFI.InternalTool.BS.Service.VacationService;
 import Com.IFI.InternalTool.DS.DAO.VacationDAO;
 import Com.IFI.InternalTool.DS.Model.Vacation;
-import Com.IFI.InternalTool.DS.Model.Vacation_approved;
-import Com.IFI.InternalTool.DS.Model.Vacation_type;
+import Com.IFI.InternalTool.DS.Model.Vacation_Approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_Type;
 import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 @Service("VacationService")
 public class VacationServiceImpl implements VacationService{
@@ -32,11 +32,11 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.getVacationById(vacation_id);
 	}
 	@Override
-	public void saveVacationApproved(Vacation_approved vacation_approved) {
+	public void saveVacationApproved(Vacation_Approved vacation_approved) {
 		vacationDAO.saveVacationApproved(vacation_approved);
 	}
 	@Override
-	public List<Vacation_type> getAllVacationType() {
+	public List<Vacation_Type> getAllVacationType() {
 		return vacationDAO.getAllVacationType();
 	}
 	@Override
@@ -56,8 +56,8 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.getPriority(manager_id, vacation_id);
 	}
 	@Override
-	public List<Vacation> getAllVacationByEmp2(long employee_id,long manager_id,String sortedColumn,Boolean desc) {
-		return vacationDAO.getAllVacationByEmp2(employee_id, manager_id, sortedColumn, desc);
+	public List<Vacation> getAllVacationByEmp2(long manager_id,int page, int pageSize,String sortedColumn,Boolean desc) {
+		return vacationDAO.getAllVacationByEmp2(manager_id,page,pageSize, sortedColumn, desc);
 	
 	}
 
