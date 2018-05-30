@@ -16,6 +16,7 @@ import Com.IFI.InternalTool.DS.DAO.VacationDAO;
 import Com.IFI.InternalTool.DS.Model.Employee;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_Approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_Log;
 import Com.IFI.InternalTool.DS.Model.Vacation_Type;
 import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 @Repository("VacationDAO")
@@ -219,6 +220,39 @@ public class VacationDAOImpl implements VacationDAO{
 		session.close();
 		return list;
 	}
+	@Override
+	public List<Long> getManagerByVacationId(long vacation_id) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "Select t.manager_id From Vacation_Approved t INNER JOIN Vacation AS v ON (t.vacation_id=v.vacation_id) where  t.vacation_id=:vacation_id ";
+		Query query = session.createQuery(hql);
+		query.setParameter("vacation_id", vacation_id);
+		List<Long> list=query.list();
+		session.close();
+		return list;
+	}
+	@Override
+	public boolean saveVacationLog(Vacation_Log vacation_log) {
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		Transaction tx = null;
+		tx=session.beginTransaction();
+		session.saveOrUpdate(vacation_log);
+		session.close();
+		tx.commit();
+		return true;
+	}
+	@Override
+	public Vacation_Log getVacationLogByVacationIdAndNextApproveId(long vacation_id,long next_approve_id) {
+		
+		Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+		String hql = "From Vacation_Log where vacation_id=:vacation_id and next_approve_id=:next_approve_id";
+		Query query = session.createQuery(hql);
+		query.setParameter("next_approve_id", next_approve_id);
+		query.setParameter("vacation_id", vacation_id);
+		Vacation_Log vl=(Vacation_Log) query.uniqueResult();
+		session.close();
+		return vl;
+	}
+
 
 }
 

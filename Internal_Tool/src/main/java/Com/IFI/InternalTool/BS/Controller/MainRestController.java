@@ -20,6 +20,7 @@ import Com.IFI.InternalTool.DS.Model.Project;
 import Com.IFI.InternalTool.DS.Model.Project_Manager;
 import Com.IFI.InternalTool.DS.Model.Vacation;
 import Com.IFI.InternalTool.DS.Model.Vacation_Approved;
+import Com.IFI.InternalTool.DS.Model.Vacation_Log;
 import Com.IFI.InternalTool.DS.Model.Vacation_Type;
 import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 
@@ -217,6 +218,13 @@ public class MainRestController {
 							va.setManager_id(u.getManager_id());
 							va.setPriority(u.getPriority());
 							vacationService.saveVacationApproved(va);
+							List<Long> listManagerId= vacationService.getManagerByVacationId(vacation.getVacation_id());
+							Vacation_Log v=new Vacation_Log();
+							for(Long a:listManagerId) {
+								v.setVacation_id(vacation.getVacation_id());
+								v.setNext_approve_id(a);	
+								vacationService.saveVacationLog(v);
+							}
 							message.setDescription("Save vacation successfully");
 							message.setCode("CODE OK!");
 							message.setStatus("OK!");
@@ -247,6 +255,13 @@ public class MainRestController {
 							va.setManager_id(u.getManager_id());
 							va.setPriority(u.getPriority());
 							vacationService.saveVacationApproved(va);
+							List<Long> listManagerId= vacationService.getManagerByVacationId(vacation.getVacation_id());
+							Vacation_Log v=new Vacation_Log();
+							for(Long a:listManagerId) {
+								v.setVacation_id(vacation.getVacation_id());
+								v.setNext_approve_id(a);	
+								vacationService.saveVacationLog(v);
+							}
 							message.setDescription("Save vacation successfully");
 							message.setCode("CODE OK!");
 							message.setStatus("OK!");
@@ -324,28 +339,37 @@ public class MainRestController {
 		@RequestMapping("/approveEmployeeRequest")
 		public Vacation approveEmployeeRequest(@RequestParam("manager_id") long manager_id, @RequestParam("vacation_id") long vacation_id) {
 				Vacation v=vacationService.getVacationById(vacation_id);
+				Vacation_Log v_log=vacationService.getVacationLogByVacationIdAndNextApproveId(vacation_id, manager_id);
 				int max=vacationService.getMaxPriority(vacation_id);
 				int my_prio=vacationService.getPriority(manager_id, vacation_id);
-				if(my_prio<max) {
-					v.setStatus(my_prio+1);
-					v.setIs_approved(false);
-					vacationService.saveVacation(v);
-				}
-				if(my_prio==max) {
-					v.setStatus(max);
-					v.setIs_approved(true);
-					vacationService.saveVacation(v);
-				}
+					if(my_prio<max) {
+						v.setStatus(my_prio+1);
+						v.setIs_approved(false);
+						v_log.setApproved_id(manager_id);
+						vacationService.saveVacationLog(v_log);
+						vacationService.saveVacation(v);
+					}
+					if(my_prio==max) {
+						v.setStatus(max);
+						v.setIs_approved(true);	
+						vacationService.saveVacation(v);
+						v_log.setApproved_id(manager_id);
+						vacationService.saveVacationLog(v_log);
+					}
 				return v;
 		}
 		
 		//disapprove a request
 			@RequestMapping("/disapproveEmployeeRequest")
-			public Vacation disapproveEmployeeRequest( @RequestParam("vacation_id") long vacation_id) {
+			public Vacation disapproveEmployeeRequest( @RequestParam("manager_id") long manager_id,@RequestParam("vacation_id") long vacation_id) {
+					
 					Vacation v=vacationService.getVacationById(vacation_id);
+					Vacation_Log v_log=vacationService.getVacationLogByVacationIdAndNextApproveId(vacation_id, manager_id);
 					v.setStatus(-1);
 					v.setIs_approved(false);
 					vacationService.saveVacation(v);
+					v_log.setDisapproved_id(manager_id);
+					vacationService.saveVacationLog(v_log);
 					return v;
 			}
 	
