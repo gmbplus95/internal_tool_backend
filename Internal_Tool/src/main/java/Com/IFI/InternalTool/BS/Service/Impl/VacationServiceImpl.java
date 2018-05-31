@@ -69,16 +69,13 @@ public class VacationServiceImpl implements VacationService{
 	public boolean saveVacationLog(Vacation_Log vacation_log) {
 		return vacationDAO.saveVacationLog(vacation_log);
 	}
-	@Override
-	public List<Vacation_Log> getVacationLogByVacationId(long vacation_id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	@Override
 	public Vacation_Log getVacationLogByVacationIdAndNextApproveId(long vacation_id, long next_approve_id) {
 		return vacationDAO.getVacationLogByVacationIdAndNextApproveId(vacation_id, next_approve_id);
 	
 	}
+
 
 
 }

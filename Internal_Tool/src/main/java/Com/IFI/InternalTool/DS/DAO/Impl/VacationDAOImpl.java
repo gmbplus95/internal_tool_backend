@@ -24,7 +24,6 @@ import Com.IFI.InternalTool.DS.Model.SearchModel.VacationSearch;
 public class VacationDAOImpl implements VacationDAO{
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-	
 	//employee page
 	@Override
 	public List<Vacation> getAllVacationByEmp(long employee_id,int page, int pageSize,String sortedColumn,Boolean desc) {
@@ -110,12 +109,12 @@ public class VacationDAOImpl implements VacationDAO{
 		hql+="WHERE (:emp_name IS NULL OR e.fullname LIKE CONCAT('%', :emp_name, '%')) ";
 		hql+="AND (:status =0 or v.status=:status) ";
 		hql+="AND (:pro_name IS NULL OR p.name LIKE CONCAT('%', :pro_name, '%')) ";
-		hql+="AND ((:from_date IS NULL and ( :to_date IS NOT NULL and (:to_date> v.to_date) or (:to_date<v.to_date and :to_date>=v.from_date))) "; 
+		hql+="AND ((:from_date IS NULL and ( :to_date IS NOT NULL and (:to_date>= v.to_date) or (:to_date < v.to_date and :to_date>=v.from_date))) "; 
 		hql+="or (:to_date IS NULL and (:from_date IS NOT NULL and :from_date <= v.to_date)) ";
 		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.from_date and :to_date <= v.to_date and :from_date <= :to_date) ";
 		hql+="or (:from_date <= v.from_date and :to_date >= v.from_date and :to_date <= v.to_date and :from_date <= :to_date) ";
-		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.to_date and :from_date <= :to_date)";
-		hql+="or (:from_date <= v.from_date and :to_date >= v.to_date and :from_date <= :to_date)";
+		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.to_date and :from_date <= :to_date) ";
+		hql+="or (:from_date <= v.from_date and :to_date >= v.to_date and :from_date <= :to_date) ";
 		hql+="or (:from_date IS NULL and :to_date IS NULL)) ";
 		hql+="AND (pm.manager_id=:manager_id)";
 		Query query = session.createQuery(hql);
@@ -146,13 +145,13 @@ public class VacationDAOImpl implements VacationDAO{
 		String hql = "Select v from Vacation v INNER JOIN Employee AS e ON v.employee_id= e.employee_id INNER JOIN Project AS p ON v.project_id=p.project_id ";
 		hql+="WHERE (:pro_name IS NULL OR p.name LIKE CONCAT('%', :pro_name, '%')) ";
 		hql+="AND (:status =0 or v.status=:status) ";
-		hql+="AND ((:from_date IS NULL and ( :to_date IS NOT NULL and (:to_date> v.to_date) or (:to_date<v.to_date and :to_date>=v.from_date))) "; 
+		hql+="AND ((:from_date IS NULL and ( :to_date IS NOT NULL and (:to_date >= v.to_date) or (:to_date<v.to_date and :to_date>=v.from_date))) "; 
 		hql+="or (:to_date IS NULL and (:from_date IS NOT NULL and :from_date <= v.to_date)) ";
 		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.from_date and :to_date <= v.to_date and :from_date <= :to_date) ";
 		hql+="or (:from_date <= v.from_date and :to_date >= v.from_date and :to_date <= v.to_date and :from_date <= :to_date) ";
-		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.to_date and :from_date <= :to_date)";
-		hql+="or (:from_date <= v.from_date and :to_date >= v.to_date and :from_date <= :to_date)";
-		hql+="or (:from_date IS NULL and :to_date IS NULL))";
+		hql+="or (:from_date >= v.from_date and :from_date <= v.to_date and :to_date >= v.to_date and :from_date <= :to_date) ";
+		hql+="or (:from_date <= v.from_date and :to_date >= v.to_date and :from_date <= :to_date) ";
+		hql+="or (:from_date IS NULL and :to_date IS NULL)) ";
 		hql+="AND (v.employee_id=:employee_id) ";
 		if(sortedColumn != null && desc != null){
 			String order = "";
@@ -252,6 +251,7 @@ public class VacationDAOImpl implements VacationDAO{
 		session.close();
 		return vl;
 	}
+
 
 
 }

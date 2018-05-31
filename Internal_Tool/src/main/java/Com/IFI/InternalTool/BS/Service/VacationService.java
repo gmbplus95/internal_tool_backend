@@ -22,7 +22,7 @@ public interface VacationService {
 	List<Vacation> getAllVacationByEmp2(long manager_id,int page, int pageSize,String sortedColumn,Boolean desc);
 	List<Long> getManagerByVacationId(long vacation_id);
 	boolean saveVacationLog(Vacation_Log vacation_log);
-	List<Vacation_Log> getVacationLogByVacationId(long vacation_id);
 	Vacation_Log getVacationLogByVacationIdAndNextApproveId(long vacation_id,long next_approve_id);
+	
 
 }
