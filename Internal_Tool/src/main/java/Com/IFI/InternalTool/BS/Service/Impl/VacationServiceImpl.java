@@ -75,6 +75,18 @@ public class VacationServiceImpl implements VacationService{
 		return vacationDAO.getVacationLogByVacationIdAndNextApproveId(vacation_id, next_approve_id);
 	
 	}
+	@Override
+	public List<Long> getNextApproveIdByVacationId(Long vacation_id) {
+		return vacationDAO.getNextApproveIdByVacationId(vacation_id);
+	}
+	@Override
+	public List<Long> getApprovedIdByVacationId(Long vacation_id) {
+		return vacationDAO.getApprovedIdByVacationId(vacation_id);
+	}
+	@Override
+	public Long getDisApproveIdByVacationId(Long vacation_id) {
+		return vacationDAO.getDisApproveIdByVacationId(vacation_id);
+	}
 
 
 
